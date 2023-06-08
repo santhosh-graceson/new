@@ -8,7 +8,7 @@ import time as t
 import numpy as np
 from datetime import datetime
 from PIL import Image
-RANGE=100000000
+RANGE=10000000000
 
 #Page setup
 st.set_page_config(layout ="wide")
