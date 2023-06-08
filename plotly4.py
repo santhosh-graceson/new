@@ -4,11 +4,11 @@ import websocket
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import time as t
-import numpy as np
+import gc
 from datetime import datetime
 from PIL import Image
 RANGE=100000000
+gc.enable()
 
 #Page setup
 st.set_page_config(layout ="wide")
@@ -70,6 +70,7 @@ awp_container1,awp_container2=values_container.columns(2)
 awp_container3, awp_container4= values_container.columns(2)
 awp_container5, awp_container6 = values_container.columns(2)
 chart = chart_container.empty()
+
 #Websocket connection establishment
 websocket.enableTrace(True)
 ws = websocket.WebSocket()
@@ -120,10 +121,7 @@ last_awp6.markdown("<h2 style='font-size:19px;gap: 0.1rem;color: #87CEEB;font-sy
 last_awp6_value = awp_container6.empty()
 last_awp6_value.markdown("<p style='font-size:36px;gap: 0.1rem;color: #87CEEB;font-synthesis: bold;text-align:center;'></p>", unsafe_allow_html=True)
 
-counter=0
-
 #Filling the gap for the first row  and the second row grid portion column
-
 
 st.markdown("""
     <style> 
@@ -149,9 +147,6 @@ st.markdown("""
     }
     </style>
     """,unsafe_allow_html=True)
-
-
-
 
 #Background colour for Ppeak
 st.markdown("""
@@ -287,20 +282,6 @@ st.markdown("""
     </style>
     """,unsafe_allow_html=True)
 
-# #Plotting colour
-# st.markdown("""
-#     <style>
-#    div.user-select-none.svg-container{
-#     # border-bottom-color: #535B6B;
-#     # border-right-color: #535B6B;
-#     border-left-color: #535B6B;
-#     # border-right-style: solid;
-#     # border-bottom-style: solid;
-#     border-left-style: solid;
-# }
-#     </style>
-#     """,unsafe_allow_html=True)
-
 #Plotting colour
 st.markdown("""
     <style>
@@ -314,20 +295,6 @@ st.markdown("""
 }
     </style>
     """,unsafe_allow_html=True)
-
-# #Plotting colour
-# st.markdown("""
-#     <style>
-#    div.css-1a32fsj.e19lei0e0:nth-last-of-type(n){
-#     border-bottom-color: #535B6B;
-#     # border-right-color: #535B6B;
-#     # border-left-color: #535B6B;
-#     # border-right-style: solid;
-#     border-bottom-style: solid;
-#     # border-left-style: solid;
-# }
-#     </style>
-#     """,unsafe_allow_html=True)
 
 #Background colour plotting box
 st.markdown("""
@@ -343,6 +310,7 @@ st.markdown("""
     </style>
     """,unsafe_allow_html=True)
 
+counter=0
 while True:
     try:  
 
@@ -371,18 +339,12 @@ while True:
                 last_awp6_value.markdown("<p style='font-size:36px;gap: 0.1rem;color: #87CEEB;font-synthesis: bold;text-align:center;'>{}</p>".format(data1[3]), unsafe_allow_html=True)
                 
                 # Update chart
-                for i in range(10):
-                    # init_time=t.time()    
+                for i in range(10):    
                     df_Inspiration_Flow = df_Inspiration_Flow.append({"Units":n+i, "Inspiration_Flow": a[i]}, ignore_index=True)
                      # Update the plot with the new data
                     fig = px.area(df_Inspiration_Flow.tail(161),x="Units",y="Inspiration_Flow",width=900,height=250)
                     # Update the placeholder with the new plot
-                    chart.plotly_chart(fig.update_traces(line_color='orange').update_layout(yaxis_range=[0,120]))
-
-                    # final_time=t.time()
-                    # time_taken=(final_time-init_time)
-                    # rem_time=np.absolute(0.05-time_taken)
-                    # t.sleep(rem_time)   
+                    chart.plotly_chart(fig.update_traces(line_color='orange').update_layout(yaxis_range=[0,120]))   
                 a.clear()
                 n=n+10
         elif n>160:
