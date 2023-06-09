@@ -79,11 +79,11 @@ ws.connect("wss://i7kggwivc5.execute-api.us-west-2.amazonaws.com/production")
 ws1.connect("wss://fr21il5ko7.execute-api.us-west-2.amazonaws.com/production")
 
 @st.cache_data
-def load_data(df_Inspiration_Flow):
+def load_data():
     df_Inspiration_Flow = pd.DataFrame(columns=["Units","Inspiration_Flow"])
     return df_Inspiration_Flow
 
-df_Inspiration_Flow = load_data(df_Inspiration_Flow)
+df_Inspiration_Flow = load_data()
 
 a=[]
 n=0
