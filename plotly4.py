@@ -83,7 +83,7 @@ def load_data(df_Inspiration_Flow):
     df_Inspiration_Flow = pd.DataFrame(columns=["Units","Inspiration_Flow"])
     return df_Inspiration_Flow
 
-df_Inspiration_Flow = load_data()
+df_Inspiration_Flow = load_data(df_Inspiration_Flow)
 
 a=[]
 n=0
