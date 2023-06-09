@@ -8,7 +8,7 @@ import gc
 from datetime import datetime
 from PIL import Image
 RANGE=100000000
-gc.enable()
+
 
 #Page setup
 st.set_page_config(layout ="wide")
@@ -77,7 +77,14 @@ ws = websocket.WebSocket()
 ws1 = websocket.WebSocket()
 ws.connect("wss://i7kggwivc5.execute-api.us-west-2.amazonaws.com/production")
 ws1.connect("wss://fr21il5ko7.execute-api.us-west-2.amazonaws.com/production")
-df_Inspiration_Flow = pd.DataFrame(columns=["Units","Inspiration_Flow"])
+
+@st.cache_data
+def load_data(df_Inspiration_Flow):
+    df_Inspiration_Flow = pd.DataFrame(columns=["Units","Inspiration_Flow"])
+    return df_Inspiration_Flow
+
+df_Inspiration_Flow = load_data()
+
 a=[]
 n=0
 
@@ -309,7 +316,7 @@ st.markdown("""
 }
     </style>
     """,unsafe_allow_html=True)
-
+gc.enable()
 counter=0
 while True:
     try:  
@@ -341,6 +348,12 @@ while True:
                 # Update chart
                 for i in range(10):    
                     df_Inspiration_Flow = df_Inspiration_Flow.append({"Units":n+i, "Inspiration_Flow": a[i]}, ignore_index=True)
+                    if len(df_Inspiration_Flow) >= 300:
+                        # Delete the initial 500 rows using iloc
+                        df_Inspiration_Flow = df_Inspiration_Flow.iloc[200:]
+
+                        # Break out of the loop since the condition is met
+                        break
                      # Update the plot with the new data
                     fig = px.area(df_Inspiration_Flow.tail(161),x="Units",y="Inspiration_Flow",width=900,height=250)
                     # Update the placeholder with the new plot
